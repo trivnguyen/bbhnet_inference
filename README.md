@@ -1,2 +1,3 @@
 # bbhnet_inference
-Inference repo for BBHnet
+
+Running BBH network on multiple  gwpy frame files

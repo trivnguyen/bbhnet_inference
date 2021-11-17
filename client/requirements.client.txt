@@ -1,0 +1,7 @@
+--extra-index-url "https://pypi.ngc.nvidia.com"
+tritonclient[all]
+google-cloud-storage
+gwpy
+lalsuite
+
+git+https://git.ligo.org/tri.nguyen/bbhnet_inference
