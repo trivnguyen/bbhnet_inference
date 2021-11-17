@@ -27,7 +27,7 @@ Optional arguments:
                         Time shift of Livingston strain w.r.t Hanford in secs. Default is 0.
 ```
 
-Example code to run on LDG-CIT:
+Below is the example code to run on LDG-CIT. The chosen frame contains a confirmed GW detection, GW170809.
 
 ```
 python inference.py -H /home/tri.nguyen/gcp_data/strain_4k_splits/5/H1/H-H1_GWOSC_O2_4KHZ_R1-1186301952-1024.gwf -L
