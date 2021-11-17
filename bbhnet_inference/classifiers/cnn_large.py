@@ -13,7 +13,7 @@ class ConvBlock(nn.Module):
         )
     def forward(self, x):
         return self.conv(x)
-        
+
 class FCBlock(nn.Module):
     def __init__(self, in_channels, out_channels, dropout_rate=0.5):
         super().__init__()
@@ -29,17 +29,12 @@ class FCBlock(nn.Module):
 
 # Define Classifier
 class Classifier(nn.Module):
-    def __init__(self, input_shape, num_classes, corr_dim=0, padding=1):
+    def __init__(self, input_shape, corr_dim=0, padding=1):
         super().__init__()
 
-        # classifier attributes 
+        # classifier attributes
         self.name = 'CNN-LARGE'
-        self.num_classes = num_classes
-        if num_classes == 2:
-            outdim = 1  # binary classification
-        else:
-            outdim = num_classes  # multi-class classification
-        
+
         # nn architecture: CONV + FC -> FC
         # 1D CONV layer for time series data
         self.featurizer = nn.Sequential(
@@ -47,7 +42,7 @@ class Classifier(nn.Module):
             ConvBlock(64, 128, padding=padding),
             ConvBlock(128, 256, padding=padding),
             ConvBlock(256, 512, padding=padding)
-        
+
         )
         # FC layer for Pearson correlation series
         fc_dim = self.get_flattened_size(input_shape)
@@ -57,12 +52,12 @@ class Classifier(nn.Module):
                 FCBlock(32, 32),
             )
             fc_dim += 32
-            
+
         # FC classifier combines features output
         self.classifier = nn.Sequential(
             FCBlock(fc_dim, 128),
             FCBlock(128, 64),
-            nn.Linear(64, outdim),
+            nn.Linear(64, 1),
         )
 
     def forward(self, x, x_corr=None):
@@ -72,7 +67,7 @@ class Classifier(nn.Module):
             x_corr = self.corr_featurizer(x_corr)
             x = torch.cat([x, x_corr], axis=1)
         x = self.classifier(x)
-        return x  
+        return x
 
     def get_flattened_size(self, input_shape):
         x = torch.rand(1, *input_shape)
@@ -81,3 +76,4 @@ class Classifier(nn.Module):
         for i in range(len(out.shape)):
             out_dim *= out.shape[i]
         return out_dim
+
